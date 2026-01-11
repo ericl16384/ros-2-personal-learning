@@ -34,7 +34,7 @@ The project is structured into "Phases," evolving from single-agent communicatio
 
 ---
 
-## 🗺 Roadmap & Progress
+## Roadmap & Progress
 
 ### Phase 1: The "Kill Switch" Architecture
 - [x] Workspace configuration and Colcon build workflows.
@@ -50,7 +50,7 @@ The project is structured into "Phases," evolving from single-agent communicatio
 
 ### Phase 3: Visualization & Perception (Current)
 - [ ] **Rviz Visualization:** Visualizing sensor data (IMU vectors) within the TF tree.
- - Currently sensor data is not displayed, only position data
+    - Currently sensor data is not displayed, only position data
 - [ ] **Sensor Fusion:** Integrating multiple data sources.
 - [ ] **Simulation:** Potential integration with Gazebo/Ignition for physics-based testing.
 
