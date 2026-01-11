@@ -32,6 +32,13 @@ The project is structured into "Phases," evolving from single-agent communicatio
 * **Fleet Orchestration**: Utilizes `fleet.launch.py` to spawn multiple instances of the drone stack (Alpha, Bravo) with isolated namespaces to prevent topic collision.
 * **`mocap_simulator`**: A specialized node acting as a centralized Vicon/Motion Capture system. It broadcasts **TF2 transforms**, placing the agents (`/alpha`, `/bravo`) into a shared 3D coordinate frame (`/world`) for visualization.
 
+### `smart_lab_phase3`: Visualization & Perception (Active)
+*Focus: Rviz2 Integration, Marker Arrays, and Visual Debugging.*
+
+* **`mocap_simulator`**: Broadcasts the "Ground Truth" TF2 coordinate frames for the fleet, anchoring them to the `world` frame.
+* **`drone_hardware` (v3)**: Enhanced hardware node that publishes `visualization_msgs/Marker` arrows to visualize invisible sensor forces (Gravity/Acceleration) in real-time.
+* **`fleet.launch.py` (v3)**: Orchestrates the full simulation: Mocap God-Node + Alpha Drone + Bravo Drone.
+
 ---
 
 ## Roadmap & Progress
@@ -48,9 +55,12 @@ The project is structured into "Phases," evolving from single-agent communicatio
 - [x] **Log Management:** Utilizing `rqt_console` and `grep` filtering for debugging parallel processes.
 - [x] **TF2 Integration:** Broadcasting dynamic coordinate frames for multiple agents.
 
-### Phase 3: Visualization & Perception (Current)
-- [ ] **Rviz Visualization:** Visualizing sensor data (IMU vectors) within the TF tree.
-    - Currently sensor data is not displayed, only position data
+### Phase 3: Perception & Interaction (Current)
+- [x] **Package Setup:** Established `smart_lab_phase3` with dependencies for `visualization_msgs` and `tf2_ros`.
+- [x] **The "God Node":** Created `mocap_simulator` to publish ground-truth TF frames.
+- [x] **Basic Visualization:** Configured Rviz2 to track the `world` -> `alpha` / `bravo` tree.
+- [] **Sensor Visualization (Alpha):** Visualizing real-time IMU gravity vectors using Rviz Markers.
+- [ ] **Multi-Agent Visualization:** Extending visual markers to the full fleet.
 - [ ] **Sensor Fusion:** Integrating multiple data sources.
 - [ ] **Simulation:** Potential integration with Gazebo/Ignition for physics-based testing.
 
