@@ -24,6 +24,9 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'drone_hardware = smart_lab_phase3.drone_hardware:main',
+            'flight_computer = smart_lab_phase3.flight_computer:main',
+            'mocap_simulator = smart_lab_phase3.mocap_simulator:main',
         ],
     },
 )
