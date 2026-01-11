@@ -4,12 +4,12 @@
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Platform](https://img.shields.io/badge/Platform-WSL2_Ubuntu_24.04-orange?style=for-the-badge&logo=ubuntu&logoColor=white)
 
-## 📌 Project Overview
+## Project Overview
 This repository documents a progressive learning path in **ROS 2 Jazzy**, specifically tailored to the technical requirements of the **SMART Lab**. The primary objective is to build competency in **Multi-Agent Systems**, **Motion Capture integration**, and **Networked Perception** to support research in autonomous aerial robotics.
 
 The project is structured into "Phases," evolving from single-agent communication to complex fleet orchestration and visualization.
 
-## 🛠 Technical Stack
+## Technical Stack
 * **Framework:** ROS 2 Jazzy Jalisco
 * **Language:** Python 3.12
 * **Environment:** Ubuntu 24.04 via WSL2 (Windows Subsystem for Linux)
@@ -18,15 +18,15 @@ The project is structured into "Phases," evolving from single-agent communicatio
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
-### 📦 `smart_lab_phase1`: Fundamentals & Safety Architecture
+### `smart_lab_phase1`: Fundamentals & Safety Architecture
 *Focus: Node communication, Quality of Service (QoS), and asynchronous service calls.*
 
 * **`drone_hardware`**: Simulates sensor streams (IMU data) with injected noise to mimic real-world hardware instability. Acts as a **Service Server** for emergency commands.
 * **`flight_computer`**: Monitors sensor data for "Critical Tilt" events. Acts as a **Service Client**, triggering an asynchronous "Kill Switch" to disarm the hardware when crash thresholds are exceeded.
 
-### 📦 `smart_lab_phase2`: Fleet Management & Spatial Awareness
+### `smart_lab_phase2`: Fleet Management & Spatial Awareness
 *Focus: Multi-agent orchestration, Namespacing, and Coordinate Transforms (TF2).*
 
 * **Fleet Orchestration**: Utilizes `fleet.launch.py` to spawn multiple instances of the drone stack (Alpha, Bravo) with isolated namespaces to prevent topic collision.
@@ -36,27 +36,27 @@ The project is structured into "Phases," evolving from single-agent communicatio
 
 ## 🗺 Roadmap & Progress
 
-### ✅ Phase 1: The "Kill Switch" Architecture
+### Phase 1: The "Kill Switch" Architecture
 - [x] Workspace configuration and Colcon build workflows.
 - [x] Publisher/Subscriber implementation (IMU Sensor streams).
 - [x] Custom Service implementation (`std_srvs/SetBool`) for remote hardware disarming.
 - [x] Asynchronous handling of service requests to prevent node blocking.
 
-### 🔄 Phase 2: The Fleet Commander (Current)
+### Phase 2: The Fleet Commander
 - [x] **Namespacing:** Refactoring nodes to support dynamic naming (`/alpha/imu` vs `/bravo/imu`).
 - [x] **Launch Systems:** Creating Python-based launch files to orchestrate multi-node fleets.
 - [x] **Log Management:** Utilizing `rqt_console` and `grep` filtering for debugging parallel processes.
 - [x] **TF2 Integration:** Broadcasting dynamic coordinate frames for multiple agents.
-- [ ] **Visualization:** Configuring Rviz2 to visualize the "virtual fleet" in 3D space.
 
-### 🔜 Phase 3: Perception & Interaction (Planned)
+### Phase 3: Visualization & Perception (Current)
 - [ ] **Rviz Visualization:** Visualizing sensor data (IMU vectors) within the TF tree.
+ - Currently sensor data is not displayed, only position data
 - [ ] **Sensor Fusion:** Integrating multiple data sources.
 - [ ] **Simulation:** Potential integration with Gazebo/Ignition for physics-based testing.
 
 ---
 
-## 🚀 Usage Instructions
+## Usage Instructions
 
 ### 1. Build the Workspace
 ```bash
