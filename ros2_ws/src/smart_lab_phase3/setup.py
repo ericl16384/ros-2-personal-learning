@@ -1,5 +1,5 @@
 import os
-from blob import blob
+from glob import glob
 from setuptools import find_packages, setup
 
 package_name = 'smart_lab_phase3'
