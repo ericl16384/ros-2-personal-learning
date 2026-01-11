@@ -59,7 +59,7 @@ The project is structured into "Phases," evolving from single-agent communicatio
 - [x] **Package Setup:** Established `smart_lab_phase3` with dependencies for `visualization_msgs` and `tf2_ros`.
 - [x] **The "God Node":** Created `mocap_simulator` to publish ground-truth TF frames.
 - [x] **Basic Visualization:** Configured Rviz2 to track the `world` -> `alpha` / `bravo` tree.
-- [] **Sensor Visualization (Alpha):** Visualizing real-time IMU gravity vectors using Rviz Markers.
+- [ ] **Sensor Visualization:** Visualizing real-time IMU gravity vectors using Rviz Markers.
 - [ ] **Multi-Agent Visualization:** Extending visual markers to the full fleet.
 - [ ] **Sensor Fusion:** Integrating multiple data sources.
 - [ ] **Simulation:** Potential integration with Gazebo/Ignition for physics-based testing.
