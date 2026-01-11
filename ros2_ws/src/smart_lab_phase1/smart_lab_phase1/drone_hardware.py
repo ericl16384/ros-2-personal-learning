@@ -7,15 +7,15 @@ import time
 
 class DroneHardware(Node):
     def __init__(self):
-        super().__init__('drone_hardware')
+        super().__init__("drone_hardware")
         
         # QUALITY OF SERVICE: 
         # "Best Effort" is standard for high-frequency sensor data on drones.
         qos_profile = QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
         
-        self.publisher_ = self.create_publisher(Imu, '/drone/imu', qos_profile)
+        self.publisher_ = self.create_publisher(Imu, "/drone/imu", qos_profile)
         self.timer = self.create_timer(0.1, self.publish_sensor_data) # 10Hz
-        self.get_logger().info('Drone Hardware Node Started (Simulating IMU)')
+        self.get_logger().info("Drone Hardware Node Started (Simulating IMU)")
 
     def publish_sensor_data(self):
         msg = Imu()
