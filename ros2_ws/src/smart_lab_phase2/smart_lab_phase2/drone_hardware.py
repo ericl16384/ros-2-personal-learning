@@ -20,7 +20,7 @@ class NetworkedDroneHardware(Node):
         # SERVICE SERVER: Listens for commands on "/drone/set_armed"
         self.srv = self.create_service(SetBool, "drone/set_armed", self.set_armed_callback)
         
-        self.get_logger().info("Networked Drone Hardware Live. Service /drone/set_armed ready.")
+        self.get_logger().info(f"Networked Drone Hardware Live. Service {self.publisher_.topic_name} ready.")
 
     def set_armed_callback(self, request, response):
         # request.data is True (Arm) or False (Disarm)
@@ -54,7 +54,7 @@ class NetworkedDroneHardware(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = DroneHardware()
+    node = NetworkedDroneHardware()
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()

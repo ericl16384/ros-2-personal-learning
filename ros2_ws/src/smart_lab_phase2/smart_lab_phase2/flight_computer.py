@@ -57,7 +57,7 @@ class NetworkedFlightComputer(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = FlightComputer()
+    node = NetworkedFlightComputer()
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()
