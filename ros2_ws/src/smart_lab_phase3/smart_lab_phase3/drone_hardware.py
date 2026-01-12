@@ -53,8 +53,8 @@ class DroneHardware(Node):
         # msg.header.frame_id = 'base_link'
 
         # Generate noise
-        # 5% chance to tilt > 0.5 rad (approx 28 degrees)
-        msg.orientation.x = random.uniform(-0.1, 0.1) + (0.6 if random.random() > 0.95 else 0.0)
+        # 2.5% chance to tilt > 0.5 rad (approx 28 degrees)
+        msg.orientation.x = random.uniform(-0.1, 0.1) + (0.6 if random.random() > 0.975 else 0.0)
         msg.orientation.y = random.uniform(-0.1, 0.1)
 
         # Simulate gravity (9.81 m/s^2) + noise
