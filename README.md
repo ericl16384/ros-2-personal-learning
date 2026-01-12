@@ -60,7 +60,7 @@ The project is structured into "Phases," evolving from single-agent communicatio
 - [x] **The "God Node":** Created `mocap_simulator` to publish ground-truth TF frames.
 - [x] **Basic Visualization:** Configured Rviz2 to track the `world` -> `alpha` / `bravo` tree.
 - [x] **Sensor Visualization (alpha drone):** Visualizing real-time IMU gravity vectors using Rviz Markers.
-- [ ] **Multi-Agent Visualization:** Extending visual markers to the full fleet (alpha drone and beta drone).
+- [x] **Multi-Agent Visualization:** Extending visual markers to the full fleet (alpha drone and beta drone).
 
 ### Future Goals
 - [ ] **Sensor Fusion:** Integrating multiple data sources.
