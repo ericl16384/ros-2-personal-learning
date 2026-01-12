@@ -59,8 +59,10 @@ The project is structured into "Phases," evolving from single-agent communicatio
 - [x] **Package Setup:** Established `smart_lab_phase3` with dependencies for `visualization_msgs` and `tf2_ros`.
 - [x] **The "God Node":** Created `mocap_simulator` to publish ground-truth TF frames.
 - [x] **Basic Visualization:** Configured Rviz2 to track the `world` -> `alpha` / `bravo` tree.
-- [ ] **Sensor Visualization (Alpha):** Visualizing real-time IMU gravity vectors using Rviz Markers.
-- [ ] **Multi-Agent Visualization:** Extending visual markers to the full fleet.
+- [x] **Sensor Visualization (alpha drone):** Visualizing real-time IMU gravity vectors using Rviz Markers.
+- [ ] **Multi-Agent Visualization:** Extending visual markers to the full fleet (alpha drone and beta drone).
+
+### Future Goals
 - [ ] **Sensor Fusion:** Integrating multiple data sources.
 - [ ] **Simulation:** Potential integration with Gazebo/Ignition for physics-based testing.
 
@@ -70,7 +72,7 @@ The project is structured into "Phases," evolving from single-agent communicatio
 
 ### 1. Build the Workspace
 ```bash
-cd ros2_ws
+# cd ros2_ws
 colcon build --symlink-install
 source install/setup.bash
 ros2 launch smart_lab_phase3 fleet.launch.py

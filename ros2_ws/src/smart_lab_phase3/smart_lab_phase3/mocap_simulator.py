@@ -54,6 +54,9 @@ class MocapSimulator(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = MocapSimulator()
-    rclpy.spin(node)
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
     node.destroy_node()
     rclpy.shutdown()

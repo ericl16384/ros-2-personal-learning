@@ -24,8 +24,6 @@ class DroneHardware(Node):
         # 3. The Safety Service
         self.srv = self.create_service(SetBool, 'arm_disarm', self.set_armed_callback)
 
-        self.timer = self.create_timer(0.1, self.publish_sensor_data) # 10Hz
-
         # State Variable
         self.armed = True
         
@@ -51,12 +49,18 @@ class DroneHardware(Node):
         # Important: Frame ID must match the TF child frame (e.g., 'alpha')
         # We use the namespace to guess the frame name, or hardcode generic 'base_link'
         # if we were using a full URDF. For now, we will assume the namespace IS the frame.
-        msg.header.frame_id = self.get_namespace().lstrip('/') 
+        msg.header.frame_id = self.get_namespace().lstrip('/')
+        # msg.header.frame_id = 'base_link'
+
+        # Generate noise
+        # 5% chance to tilt > 0.5 rad (approx 28 degrees)
+        msg.orientation.x = random.uniform(-0.1, 0.1) + (0.6 if random.random() > 0.95 else 0.0)
+        msg.orientation.y = random.uniform(-0.1, 0.1)
 
         # Simulate gravity (9.81 m/s^2) + noise
         noise = random.uniform(-0.5, 0.5)
-        msg.linear_acceleration.z = 9.81 + noise
-        msg.linear_acceleration.x = noise 
+        msg.linear_acceleration.z = -9.81 + noise
+        msg.linear_acceleration.x = noise
         msg.linear_acceleration.y = noise
 
         self.publisher_.publish(msg)
@@ -100,6 +104,9 @@ class DroneHardware(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = DroneHardware()
-    rclpy.spin(node)
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
     node.destroy_node()
     rclpy.shutdown()
