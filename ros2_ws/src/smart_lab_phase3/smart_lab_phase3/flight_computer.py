@@ -11,10 +11,10 @@ class NetworkedFlightComputer(Node):
         # Subscriber Setup (Must match Publisher QoS)
         qos_profile = QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
         self.subscription = self.create_subscription(
-            Imu, "drone/imu", self.imu_callback, qos_profile)
+            Imu, "imu", self.imu_callback, qos_profile)
         
         # SERVICE CLIENT: Connects to the server
-        self.landing_client = self.create_client(SetBool, "drone/set_armed")
+        self.landing_client = self.create_client(SetBool, "arm_disarm")
         
         # Flag to prevent spamming the kill switch
         self.emergency_triggered = False
