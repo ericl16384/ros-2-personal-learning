@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mecanum_bot">
+
+  <link name="base_link">
+    <visual><geometry><box size="0.4 0.3 0.1"/></geometry></visual>
+    <collision><geometry><box size="0.4 0.3 0.1"/></geometry></collision>
+    <inertial>
+      <mass value="5.0"/>
+      <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
+    </inertial>
+  </link>
+
+  <xacro:macro name="wheel" params="name x y">
+    <link name="${name}_link">
+      <visual>
+        <geometry><cylinder radius="0.05" length="0.04"/></geometry>
+        <material name="black"/>
+      </visual>
+      <collision>
+        <geometry><cylinder radius="0.05" length="0.04"/></geometry>
+      </collision>
+      <inertial>
+        <mass value="0.5"/>
+        <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+      </inertial>
+    </link>
+
+    <joint name="${name}_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${name}_link"/>
+      <origin xyz="${x} ${y} 0" rpy="-1.57 0 0"/>
+      <axis xyz="0 0 1"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:wheel name="front_left"  x="0.15"  y="0.18"/>
+  <xacro:wheel name="front_right" x="0.15"  y="-0.18"/>
+  <xacro:wheel name="rear_left"   x="-0.15" y="0.18"/>
+  <xacro:wheel name="rear_right"  x="-0.15" y="-0.18"/>
+
+  <ros2_control name="GazeboSystem" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+    <joint name="front_left_joint"><command_interface name="velocity"/><state_interface name="velocity"/><state_interface name="position"/></joint>
+    <joint name="front_right_joint"><command_interface name="velocity"/><state_interface name="velocity"/><state_interface name="position"/></joint>
+    <joint name="rear_left_joint"><command_interface name="velocity"/><state_interface name="velocity"/><state_interface name="position"/></joint>
+    <joint name="rear_right_joint"><command_interface name="velocity"/><state_interface name="velocity"/><state_interface name="position"/></joint>
+  </ros2_control>
+
+  <gazebo>
+    <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+      <parameters>$(find my_robot_sim)/config/controllers.yaml</parameters>
+    </plugin>
+  </gazebo>
+</robot>
