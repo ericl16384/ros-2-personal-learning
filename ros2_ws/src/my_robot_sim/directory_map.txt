@@ -1,0 +1,15 @@
+my_robot_sim/
+├── package.xml
+├── setup.py
+├── setup.cfg
+├── launch/                  <-- Place launch files here
+│   └── multi_bot.launch.py
+├── urdf/                    <-- Place URDF/Xacro here
+│   └── robot.urdf.xacro
+├── config/                  <-- Place YAML configs here
+│   └── controllers.yaml
+├── my_robot_sim/            <-- Place Python scripts here
+│   ├── __init__.py
+│   └── formation_control.py
+└── resource/
+    └── my_robot_sim
