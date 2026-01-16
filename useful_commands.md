@@ -1,5 +1,25 @@
 # Useful Commands
 
+```bash
+cd ~/git/ericl16384/ros-2-personal-learning/ros2_ws && colcon build --packages-select basic_robot_control --symlink-install && source install/setup.bash && ros2 launch basic_robot_control spawn_vehicle.launch.py
+```
+
+```bash
+ros2 run rqt_graph rqt_graph
+
+gz sim
+
+ros2 interface list
+ros2 interface package <pkg_name>
+    std_msgs
+    geometry_msgs
+    sensor_msgs
+    nav_msgs
+ros2 interface show <type_name>
+```
+
+---
+
 ### Build
 ```bash
 # build

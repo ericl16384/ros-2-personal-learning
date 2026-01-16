@@ -1,0 +1,5 @@
+- topic_name: "wheel_pose"
+  ros_type_name: "sensor_msgs/msg/JointState"
+  gz_type_name: "ignition.msgs."
+
+........ 
