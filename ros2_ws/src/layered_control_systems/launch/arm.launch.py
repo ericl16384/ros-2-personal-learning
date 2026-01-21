@@ -8,8 +8,8 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
-    pkg_path = get_package_share_directory('layered_control_systems')
-    rviz_config_path = os.path.join(pkg_path, 'rviz', 'arm.rviz')
+    # pkg_path = get_package_share_directory('layered_control_systems')
+    # rviz_config_path = os.path.join(pkg_path, 'rviz', 'arm.rviz')
 
     return LaunchDescription([
         # # # # --- RVIZ (Pre-configured) ---
@@ -24,43 +24,15 @@ def generate_launch_description():
         Node(
             package='layered_control_systems',
             executable='mocap_simulator',
-            name='vicon',
+            name='mocap_simulator',
             output='screen'
         ),
-
-        # # --- ALPHA DRONE ---
-        # # Hardware Node (Sensor Data)
-        # Node(
-        #     package="smart_lab_phase3",  # Must match your new package name
-        #     executable="drone_hardware", # Must match entry_point in setup.py
-        #     namespace="alpha",           # This prefixes topics: /alpha/imu
-        #     name="hardware_node",        # Custom name for logs
-        #     output="screen"
-        # ),
-        # # Flight Computer (Logic)
-        # Node(
-        #     package="smart_lab_phase3",
-        #     executable="flight_computer",
-        #     namespace="alpha",           # Matches the hardware above
-        #     name="computer_node",
-        #     output="screen"
-        # ),
-
-        # # --- BRAVO DRONE ---
-        # # Hardware Node
-        # Node(
-        #     package="smart_lab_phase3",
-        #     executable="drone_hardware",
-        #     namespace="bravo",           # Prefixes topics: /bravo/imu
-        #     name="hardware_node",
-        #     output="screen"
-        # ),
-        # # Flight Computer
-        # Node(
-        #     package="smart_lab_phase3",
-        #     executable="flight_computer",
-        #     namespace="bravo",
-        #     name="computer_node",
-        #     output="screen"
-        # ),
+        
+        Node(
+            package='layered_control_systems',
+            executable='arm_hardware_simulator',
+            namespace='vehicle_1',
+            name='arm_hardware_simulator',
+            output='screen'
+        ),
     ])

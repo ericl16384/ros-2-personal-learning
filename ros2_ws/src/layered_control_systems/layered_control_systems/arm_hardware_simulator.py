@@ -17,6 +17,8 @@ class ArmHardwareSimulator(Node):
         self.velocity = Vector3()
         self.acceleration = Accel()
 
+        self.pose.position.z = 1
+
         self.physics_timestep = 0.01
 
         self.arm_head_physics_timer = self.create_timer(self.physics_timestep, self.do_euler_integration_physics)
@@ -24,10 +26,6 @@ class ArmHardwareSimulator(Node):
         qos_profile = QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
 
         self.arm_head_pose_publisher = self.create_publisher(PoseStamped, "arm_head_pose_stamped", qos_profile)
-        # self.arm_head_pose_publisher_timer = self.create_timer(0.5, self.publish_sensor_data)
-
-        # self.arm_head_pose_publisher = self.create_publisher(PoseStamped, "arm_head_veloci", qos_profile)
-        # self.arm_head_physics_timer = self.create_timer(0.001, self.apply_acceleration)
 
         self.arm_head_command_subscription = self.create_subscription(
             Accel, "arm_head_command_accel", self.head_command_callback, qos_profile

@@ -1,5 +1,6 @@
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import QoSProfile, ReliabilityPolicy
 from geometry_msgs.msg import TransformStamped
 from geometry_msgs.msg import PoseStamped
 from tf2_ros import TransformBroadcaster
@@ -18,7 +19,7 @@ class MocapSimulator(Node):
         
         # Update positions at 20Hz (similar to a slow mocap system)
         # self.timer = self.create_timer(0.05, self.broadcast_positions)
-        self.get_logger().info("Simulation Started: Broadcasting TF frames for Alpha and Bravo.")
+        self.get_logger().info("Simulation Started: Broadcasting TF frames.")
     
     def broadcast_arm_head_callback(self, msg:PoseStamped):
         transform = TransformStamped()
@@ -29,9 +30,9 @@ class MocapSimulator(Node):
         transform.header.frame_id = 'world'
         transform.child_frame_id = 'arm_head'
 
-        transform.transform.translation.x = msg.position.x
-        transform.transform.translation.y = msg.position.y
-        transform.transform.translation.z = msg.position.z
+        transform.transform.translation.x = msg.pose.position.x
+        transform.transform.translation.y = msg.pose.position.y
+        transform.transform.translation.z = msg.pose.position.z
 
         self.tf_broadcaster.sendTransform([transform])
 
