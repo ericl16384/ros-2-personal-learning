@@ -6,10 +6,12 @@ class JointReader(Node):
     def __init__(self):
         super().__init__('joint_reader_node')
         
-        # Best Practice: Declare a parameter for the target joint name
-        # rather than hardcoding it.
-        self.declare_parameter('target_joint', 'left_wheel')
-        self.target_joint_name = self.get_parameter('target_joint').get_parameter_value().string_value
+        # # Best Practice: Declare a parameter for the target joint name
+        # # rather than hardcoding it.
+        # self.declare_parameter('target_joint', 'left_wheel')
+        # self.target_joint_name = self.get_parameter('target_joint').get_parameter_value().string_value
+
+        self.target_joint_name = 'left_wheel_joint'
 
         # Subscribe to the topic published by the Gazebo plugin
         # The standard topic is '/joint_states'
