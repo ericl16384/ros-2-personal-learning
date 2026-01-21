@@ -9,9 +9,9 @@ class MocapSimulator(Node):
     def __init__(self):
         super().__init__('mocap_simulator')
         
-        qos_profile = QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
         self.arm_head_command_subscription = self.create_subscription(
-            PoseStamped, "arm_head_pose_stamped", self.broadcast_arm_head_callback, qos_profile
+            PoseStamped, "arm_head_pose_stamped", self.broadcast_arm_head_callback,
+            QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
         )
         
         # The Broadcaster is the tool that sends coordinates to the ROS network
@@ -33,6 +33,8 @@ class MocapSimulator(Node):
         transform.transform.translation.x = msg.pose.position.x
         transform.transform.translation.y = msg.pose.position.y
         transform.transform.translation.z = msg.pose.position.z
+        
+        self.get_logger().info(f"publishing transform: {transform.transform.translation}")
 
         self.tf_broadcaster.sendTransform([transform])
 

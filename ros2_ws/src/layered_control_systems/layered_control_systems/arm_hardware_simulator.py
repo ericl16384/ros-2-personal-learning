@@ -17,18 +17,19 @@ class ArmHardwareSimulator(Node):
         self.velocity = Vector3()
         self.acceleration = Accel()
 
-        self.pose.position.z = 1
+        # self.pose.position.z = 1
 
-        self.physics_timestep = 0.01
+        self.physics_timestep = 0.1
 
         self.arm_head_physics_timer = self.create_timer(self.physics_timestep, self.do_euler_integration_physics)
 
-        qos_profile = QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
-
-        self.arm_head_pose_publisher = self.create_publisher(PoseStamped, "arm_head_pose_stamped", qos_profile)
-
+        self.arm_head_pose_publisher = self.create_publisher(
+            PoseStamped, "arm_head_pose_stamped",
+            QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
+        )
         self.arm_head_command_subscription = self.create_subscription(
-            Accel, "arm_head_command_accel", self.head_command_callback, qos_profile
+            Accel, "arm_head_command_accel", self.head_command_callback,
+            QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
         )
     
     def do_euler_integration_physics(self):
@@ -47,7 +48,7 @@ class ArmHardwareSimulator(Node):
     
     def publish_sensor_data(self):
         
-        # self.get_logger().info(f"publishing position: {self.pose.position.x} {self.pose.position.y} {self.pose.position.z}")
+        self.get_logger().info(f"publishing position: {self.pose.position.x} {self.pose.position.y} {self.pose.position.z}")
 
         msg = PoseStamped()
         msg.header.stamp = self.get_clock().now().to_msg()
@@ -72,12 +73,12 @@ class ArmHardwareSimulator(Node):
 
 
 
-def main():
-    rclpy.init()
-    minimal_service = ArmHardwareSimulator()
-    rclpy.spin(minimal_service)
+def main(args=None):
+    rclpy.init(args=args)
+    node = ArmHardwareSimulator()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    node.destroy_node()
     rclpy.shutdown()
-
-if __name__ == '__main__':
-    main()
-    

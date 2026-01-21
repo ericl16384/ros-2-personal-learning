@@ -24,7 +24,8 @@ def generate_launch_description():
         Node(
             package='layered_control_systems',
             executable='mocap_simulator',
-            name='mocap_simulator',
+            namespace='vehicle_1',
+            # name='mocap_simulator',
             output='screen'
         ),
         
@@ -32,7 +33,14 @@ def generate_launch_description():
             package='layered_control_systems',
             executable='arm_hardware_simulator',
             namespace='vehicle_1',
-            name='arm_hardware_simulator',
+            # name='arm_hardware_simulator',
+            output='screen'
+        ),
+        Node(
+            package='layered_control_systems',
+            executable='arm_controller',
+            namespace='vehicle_1',
+            # name='arm_controller',
             output='screen'
         ),
     ])
