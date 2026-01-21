@@ -29,6 +29,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'arm_hardware_simulator = layered_control_systems.arm_hardware_simulator:main',
+            'mocap_simulator = layered_control_systems.mocap_simulator:main',
         ],
     },
 )
