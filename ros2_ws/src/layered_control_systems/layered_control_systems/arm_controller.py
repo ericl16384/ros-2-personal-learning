@@ -29,20 +29,20 @@ class ArmController(Node):
 
         displacement = self.target_position - position
 
-        acceleration = displacement * 0.01
+        acceleration = displacement * 0.1
 
         self.acceleration_command.linear.x = acceleration[0]
         self.acceleration_command.linear.y = acceleration[1]
         self.acceleration_command.linear.z = acceleration[2]
+
+        self.publish_command()
         
     def publish_command(self):
         msg = Accel()
-        msg.header.stamp = self.get_clock().now().to_msg()
         
-        msg.header.frame_id = self.get_namespace().lstrip('/')
-        msg.linear.position.x = self.acceleration_command.linear.x
-        msg.linear.position.y = self.acceleration_command.linear.y
-        msg.linear.position.z = self.acceleration_command.linear.z
+        msg.linear.x = self.acceleration_command.linear.x
+        msg.linear.y = self.acceleration_command.linear.y
+        msg.linear.z = self.acceleration_command.linear.z
 
         self.arm_head_command_publisher.publish(msg)
 

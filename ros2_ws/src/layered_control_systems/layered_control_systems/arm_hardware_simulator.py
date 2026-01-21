@@ -19,7 +19,7 @@ class ArmHardwareSimulator(Node):
 
         # self.pose.position.z = 1
 
-        self.physics_timestep = 0.1
+        self.physics_timestep = 0.01
 
         self.arm_head_physics_timer = self.create_timer(self.physics_timestep, self.do_euler_integration_physics)
 
@@ -48,7 +48,7 @@ class ArmHardwareSimulator(Node):
     
     def publish_sensor_data(self):
         
-        self.get_logger().info(f"publishing position: {self.pose.position.x} {self.pose.position.y} {self.pose.position.z}")
+        # self.get_logger().info(f"publishing position: {self.pose.position.x} {self.pose.position.y} {self.pose.position.z}")
 
         msg = PoseStamped()
         msg.header.stamp = self.get_clock().now().to_msg()
@@ -69,7 +69,7 @@ class ArmHardwareSimulator(Node):
     def head_command_callback(self, msg):
         self.acceleration = msg
         
-        self.get_logger().info(f"updated acceleration command: {self.acceleration}")
+        # self.get_logger().info(f"updated acceleration command: {self.acceleration.linear}")
 
 
 

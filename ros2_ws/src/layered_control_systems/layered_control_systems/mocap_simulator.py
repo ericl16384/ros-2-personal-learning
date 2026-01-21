@@ -34,7 +34,7 @@ class MocapSimulator(Node):
         transform.transform.translation.y = msg.pose.position.y
         transform.transform.translation.z = msg.pose.position.z
         
-        self.get_logger().info(f"publishing transform: {transform.transform.translation}")
+        # self.get_logger().info(f"publishing transform: {transform.transform.translation}")
 
         self.tf_broadcaster.sendTransform([transform])
 
