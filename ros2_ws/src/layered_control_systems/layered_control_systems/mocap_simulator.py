@@ -31,8 +31,8 @@ class MocapSimulator(Node):
         # transform.header.stamp = self.get_clock().now().to_msg()
         transform.header.stamp = msg.header.stamp
 
-        transform.header.frame_id = 'world'
-        transform.child_frame_id = msg.header.frame_id
+        transform.header.frame_id = msg.header.frame_id + '/drivetrain'
+        transform.child_frame_id = msg.header.frame_id + '/arm_head'
 
         transform.transform.translation.x = msg.pose.position.x
         transform.transform.translation.y = msg.pose.position.y
@@ -49,7 +49,7 @@ class MocapSimulator(Node):
         transform.header.stamp = msg.header.stamp
 
         transform.header.frame_id = 'world'
-        transform.child_frame_id = msg.header.frame_id
+        transform.child_frame_id = msg.header.frame_id + '/drivetrain'
 
         transform.transform.translation.x = msg.pose.position.x
         transform.transform.translation.y = msg.pose.position.y

@@ -16,6 +16,9 @@ class DrivetrainHardwareSimulator(Node):
         self.pose = Pose()
         self.velocity = Vector3()
 
+        self.pose.position.x = 1
+        self.pose.position.y = 2
+
         self.acceleration = Accel()
 
         # self.pose.position.z = 1
@@ -68,7 +71,7 @@ class DrivetrainHardwareSimulator(Node):
         pose_msg.pose.position.y = self.pose.position.y
         pose_msg.pose.position.z = self.pose.position.z
 
-        self.arm_drivetrain_pose_publisher.publish(pose_msg)
+        self.drivetrain_pose_publisher.publish(pose_msg)
 
 
         vel_msg = Vector3Stamped()
@@ -79,7 +82,7 @@ class DrivetrainHardwareSimulator(Node):
         vel_msg.vector.y = self.velocity.y
         vel_msg.vector.z = self.velocity.z
 
-        self.arm_drivetrain_vel_publisher.publish(vel_msg)
+        self.drivetrain_vel_publisher.publish(vel_msg)
 
         # self.publish_visual_marker(msg)
     
