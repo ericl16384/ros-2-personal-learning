@@ -22,7 +22,11 @@ class MocapSimulator(Node):
         self.get_logger().info("Simulation Started: Broadcasting TF frames.")
     
     def broadcast_arm_head_callback(self, msg:PoseStamped):
+        transforms = []
+
+
         transform = TransformStamped()
+        transforms.append(transform)
 
         # transform.header.stamp = self.get_clock().now().to_msg()
         transform.header.stamp = msg.header.stamp
@@ -36,7 +40,8 @@ class MocapSimulator(Node):
         
         # self.get_logger().info(f"publishing transform: {transform.transform.translation}")
 
-        self.tf_broadcaster.sendTransform([transform])
+
+        self.tf_broadcaster.sendTransform(transforms)
 
     # def broadcast_positions(self):
     #     # Get the current ROS time (essential for TF to work)

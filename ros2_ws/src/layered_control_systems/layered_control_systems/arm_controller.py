@@ -47,7 +47,7 @@ class ArmController(Node):
         # a = -( B*v + w_0**2*x )
         
 
-        w_0 = 2              # spring relation (force scaling)
+        w_0 = 3              # spring relation (force scaling)
         B = 2*w_0
 
         # m = 1                 # todo: change the mass dynamically by measuring the response of the payload/arm system
@@ -62,7 +62,7 @@ class ArmController(Node):
 
         for param in (r, v, target_position):
             if isinstance(param, type(None)):
-                self.get_logger().warn(f"control loop disabled; inputs not set")
+                self.get_logger().debug(f"control loop disabled; inputs not set")
                 return
 
 
@@ -72,7 +72,7 @@ class ArmController(Node):
         acceleration = - velocity*B - displacement*w_0**2
 
 
-        self.get_logger().info(f"{displacement}")
+        # self.get_logger().info(f"{displacement}")
 
 
         self.acceleration_command.linear.x = acceleration[0]
@@ -90,6 +90,8 @@ class ArmController(Node):
     
     def head_target_pos_callback(self, msg):
         self.target_position = np.array((msg.vector.x, msg.vector.y, msg.vector.z))
+
+        self.get_logger().info(f"arm target pos set: {self.target_position}")
         
     def publish_accel_command(self):
         msg = Accel()
