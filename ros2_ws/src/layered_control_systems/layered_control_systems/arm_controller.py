@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSProfile, ReliabilityPolicy
 from geometry_msgs.msg import PoseStamped
+from geometry_msgs.msg import Vector3Stamped
 from geometry_msgs.msg import Accel
 from std_srvs.srv import SetBool # <--- Service Type
 
@@ -11,33 +12,76 @@ class ArmController(Node):
     def __init__(self):
         super().__init__("arm_controller")
 
-        self.target_position = np.array((1, 2, 0))
+        self.control_timestep = 1/60  # 60 Hz
+        self.control_timer = self.create_timer(self.control_timestep, self.do_control_step)
 
-        self.acceleration_command = Accel()
+
+        self.last_r = None  #PoseStamped()
+        self.last_v = None  #Vector3Stamped()
         
         self.arm_head_pose_subscription = self.create_subscription(
             PoseStamped, "arm_head_pose_stamped", self.head_pose_callback,
             QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
         )
+        self.arm_head_vel_subscription = self.create_subscription(
+            Vector3Stamped, "arm_head_vel_stamped", self.head_vel_callback,
+            QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
+        )
+
+
+        self.target_position = np.array((1, 2, 0))
+        self.acceleration_command = Accel()
+
         self.arm_head_command_publisher = self.create_publisher(
             Accel, "arm_head_command_accel",
             QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
         )
-    
-    def head_pose_callback(self, msg:PoseStamped):
-        position = np.array((msg.pose.position.x, msg.pose.position.y, msg.pose.position.z))
 
-        displacement = self.target_position - position
+    def do_control_step(self):
 
-        acceleration = displacement * 0.1
+        # a + B*v + w_0**2*x = 0
+        # a = -( B*v + w_0**2*x )
+
+        
+
+        w_0 = 2
+        B = 2*w_0
+
+
+        # operation is not atomic, so let's read these together for concurrency
+        r = self.last_r
+        v = self.last_v
+        target_position = self.target_position
+
+        for param in (r, v, target_position):
+            if isinstance(param, type(None)):
+                self.get_logger().warn(f"control loop disabled; inputs not set")
+                return
+
+
+        # position = np.array((msg.pose.position.x, msg.pose.position.y, msg.pose.position.z))
+        displacement = r - target_position
+        velocity = v
+        acceleration = - velocity*B - displacement*w_0**2
+
+
+        self.get_logger().info(f"{displacement}")
+
 
         self.acceleration_command.linear.x = acceleration[0]
         self.acceleration_command.linear.y = acceleration[1]
         self.acceleration_command.linear.z = acceleration[2]
 
-        self.publish_command()
+        self.publish_accel_command()
+
+    
+    def head_pose_callback(self, msg:PoseStamped):
+        self.last_r = np.array((msg.pose.position.x, msg.pose.position.y, msg.pose.position.z))
+    
+    def head_vel_callback(self, msg:PoseStamped):
+        self.last_v = np.array((msg.vector.x, msg.vector.y, msg.vector.z))
         
-    def publish_command(self):
+    def publish_accel_command(self):
         msg = Accel()
         
         msg.linear.x = self.acceleration_command.linear.x
