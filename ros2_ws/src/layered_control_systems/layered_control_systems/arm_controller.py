@@ -16,8 +16,9 @@ class ArmController(Node):
         self.control_timer = self.create_timer(self.control_timestep, self.do_control_step)
 
 
-        self.last_r = None  #PoseStamped()
-        self.last_v = None  #Vector3Stamped()
+        self.last_r = None
+        self.last_v = None
+        self.target_position = None
         
         self.arm_head_pose_subscription = self.create_subscription(
             PoseStamped, "arm_head_pose_stamped", self.head_pose_callback,
@@ -27,9 +28,12 @@ class ArmController(Node):
             Vector3Stamped, "arm_head_vel_stamped", self.head_vel_callback,
             QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
         )
+        self.arm_head_target_pos_subscription = self.create_subscription(
+            Vector3Stamped, "arm_head_target_pos", self.head_target_pos_callback,
+            QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
+        )
 
 
-        self.target_position = np.array((1, 2, 0))
         self.acceleration_command = Accel()
 
         self.arm_head_command_publisher = self.create_publisher(
@@ -41,11 +45,14 @@ class ArmController(Node):
 
         # a + B*v + w_0**2*x = 0
         # a = -( B*v + w_0**2*x )
-
         
 
-        w_0 = 2
+        w_0 = 2              # spring relation (force scaling)
         B = 2*w_0
+
+        # m = 1                 # todo: change the mass dynamically by measuring the response of the payload/arm system
+        # c = 1
+        # k = 1
 
 
         # operation is not atomic, so let's read these together for concurrency
@@ -75,11 +82,14 @@ class ArmController(Node):
         self.publish_accel_command()
 
     
-    def head_pose_callback(self, msg:PoseStamped):
+    def head_pose_callback(self, msg):
         self.last_r = np.array((msg.pose.position.x, msg.pose.position.y, msg.pose.position.z))
     
-    def head_vel_callback(self, msg:PoseStamped):
+    def head_vel_callback(self, msg):
         self.last_v = np.array((msg.vector.x, msg.vector.y, msg.vector.z))
+    
+    def head_target_pos_callback(self, msg):
+        self.target_position = np.array((msg.vector.x, msg.vector.y, msg.vector.z))
         
     def publish_accel_command(self):
         msg = Accel()

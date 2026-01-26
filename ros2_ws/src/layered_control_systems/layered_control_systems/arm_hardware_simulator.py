@@ -29,7 +29,7 @@ class ArmHardwareSimulator(Node):
             QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
         )
         self.arm_head_vel_publisher = self.create_publisher(
-            Vector3Stamped, "arm_head_vel_stamped",                                    # I wish I knew how to stamp this!
+            Vector3Stamped, "arm_head_vel_stamped",
             QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
         )
 
