@@ -13,6 +13,10 @@ class MocapSimulator(Node):
             PoseStamped, "arm_head_pose_stamped", self.broadcast_arm_head_callback,
             QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
         )
+        self.arm_head_command_subscription = self.create_subscription(
+            PoseStamped, "drivetrain_pose_stamped", self.broadcast_drivetrain_callback,
+            QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
+        )
         
         # The Broadcaster is the tool that sends coordinates to the ROS network
         self.tf_broadcaster = TransformBroadcaster(self)
@@ -22,17 +26,13 @@ class MocapSimulator(Node):
         self.get_logger().info("Simulation Started: Broadcasting TF frames.")
     
     def broadcast_arm_head_callback(self, msg:PoseStamped):
-        transforms = []
-
-
         transform = TransformStamped()
-        transforms.append(transform)
 
         # transform.header.stamp = self.get_clock().now().to_msg()
         transform.header.stamp = msg.header.stamp
 
         transform.header.frame_id = 'world'
-        transform.child_frame_id = 'arm_head'
+        transform.child_frame_id = msg.header.frame_id
 
         transform.transform.translation.x = msg.pose.position.x
         transform.transform.translation.y = msg.pose.position.y
@@ -40,8 +40,24 @@ class MocapSimulator(Node):
         
         # self.get_logger().info(f"publishing transform: {transform.transform.translation}")
 
+        self.tf_broadcaster.sendTransform(transform)
+    
+    def broadcast_drivetrain_callback(self, msg:PoseStamped):
+        transform = TransformStamped()
 
-        self.tf_broadcaster.sendTransform(transforms)
+        # transform.header.stamp = self.get_clock().now().to_msg()
+        transform.header.stamp = msg.header.stamp
+
+        transform.header.frame_id = 'world'
+        transform.child_frame_id = msg.header.frame_id
+
+        transform.transform.translation.x = msg.pose.position.x
+        transform.transform.translation.y = msg.pose.position.y
+        transform.transform.translation.z = msg.pose.position.z
+        
+        # self.get_logger().info(f"publishing transform: {transform.transform.translation}")
+
+        self.tf_broadcaster.sendTransform(transform)
 
     # def broadcast_positions(self):
     #     # Get the current ROS time (essential for TF to work)

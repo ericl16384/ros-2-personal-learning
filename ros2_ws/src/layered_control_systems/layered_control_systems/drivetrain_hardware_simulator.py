@@ -8,9 +8,9 @@ from geometry_msgs.msg import Vector3
 from geometry_msgs.msg import Vector3Stamped
 from geometry_msgs.msg import Accel
 
-class ArmHardwareSimulator(Node):
+class DrivetrainHardwareSimulator(Node):
     def __init__(self):
-        super().__init__("arm_hardware_simulator")
+        super().__init__("drivetrain_hardware_simulator")
 
 
         self.pose = Pose()
@@ -21,22 +21,23 @@ class ArmHardwareSimulator(Node):
         # self.pose.position.z = 1
 
         self.physics_timestep = 0.01
-        self.arm_head_physics_timer = self.create_timer(self.physics_timestep, self.do_euler_integration_physics)
+        self.drivetrain_physics_timer = self.create_timer(self.physics_timestep, self.do_euler_integration_physics)
 
-        self.arm_head_pose_publisher = self.create_publisher(
-            PoseStamped, "arm_head_pose_stamped",
+        self.drivetrain_pose_publisher = self.create_publisher(
+            PoseStamped, "drivetrain_pose_stamped",
             QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
         )
-        self.arm_head_vel_publisher = self.create_publisher(
-            Vector3Stamped, "arm_head_vel_stamped",
+        self.drivetrain_vel_publisher = self.create_publisher(
+            Vector3Stamped, "drivetrain_vel_stamped",
             QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
         )
 
-        self.arm_head_command_subscription = self.create_subscription(
-            Accel, "arm_head_command_accel", self.head_command_callback,
+        self.drivetrain_command_subscription = self.create_subscription(
+            Accel, "drivetrain_command_accel", self.drivetrain_command_callback,
             QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
         )
-    
+
+
     def do_euler_integration_physics(self):
         
         # self.get_logger().info(f"euler integration")
@@ -67,7 +68,7 @@ class ArmHardwareSimulator(Node):
         pose_msg.pose.position.y = self.pose.position.y
         pose_msg.pose.position.z = self.pose.position.z
 
-        self.arm_head_pose_publisher.publish(pose_msg)
+        self.arm_drivetrain_pose_publisher.publish(pose_msg)
 
 
         vel_msg = Vector3Stamped()
@@ -78,7 +79,7 @@ class ArmHardwareSimulator(Node):
         vel_msg.vector.y = self.velocity.y
         vel_msg.vector.z = self.velocity.z
 
-        self.arm_head_vel_publisher.publish(vel_msg)
+        self.arm_drivetrain_vel_publisher.publish(vel_msg)
 
         # self.publish_visual_marker(msg)
     
@@ -87,7 +88,7 @@ class ArmHardwareSimulator(Node):
     #     # self.get_logger().info("apply_acceleration_callback ")
     #     pass
 
-    def head_command_callback(self, msg):
+    def drivetrain_command_callback(self, msg):
         self.acceleration = msg
         
         # self.get_logger().info(f"updated acceleration command: {self.acceleration.linear}")
@@ -96,10 +97,12 @@ class ArmHardwareSimulator(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = ArmHardwareSimulator()
+    node = DrivetrainHardwareSimulator()
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
         pass
     node.destroy_node()
     rclpy.shutdown()
+
+
