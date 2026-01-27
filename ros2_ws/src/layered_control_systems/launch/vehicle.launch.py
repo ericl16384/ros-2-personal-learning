@@ -51,4 +51,19 @@ def generate_launch_description():
             # name='arm_controller',
             output='screen'
         ),
+        Node(
+            package='layered_control_systems',
+            executable='drivetrain_controller',
+            namespace='vehicle_1',
+            # name='arm_controller',
+            output='screen'
+        ),
+        
+        Node(
+            package='layered_control_systems',
+            executable='publish_random_arm_target_positions',
+            namespace='vehicle_1',
+            # name='arm_controller',
+            output='screen'
+        ),
     ])

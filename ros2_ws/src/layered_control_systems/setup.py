@@ -29,10 +29,12 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'arm_hardware_simulator = layered_control_systems.arm_hardware_simulator:main',
             'drivetrain_hardware_simulator = layered_control_systems.drivetrain_hardware_simulator:main',
+            'arm_hardware_simulator = layered_control_systems.arm_hardware_simulator:main',
             
             'mocap_simulator = layered_control_systems.mocap_simulator:main',
+
+            'drivetrain_controller = layered_control_systems.drivetrain_controller:main',
             'arm_controller = layered_control_systems.arm_controller:main',
 
             'publish_random_arm_target_positions = layered_control_systems.publish_random_arm_target_positions:main',
