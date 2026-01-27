@@ -91,7 +91,7 @@ class ArmController(Node):
     def head_target_pos_callback(self, msg):
         self.target_position = np.array((msg.vector.x, msg.vector.y, msg.vector.z))
 
-        self.get_logger().info(f"arm target pos set: {self.target_position}")
+        # self.get_logger().info(f"arm target pos set: {self.target_position}")
         
     def publish_accel_command(self):
         msg = Accel()

@@ -46,6 +46,13 @@ def generate_launch_description():
 
         Node(
             package='layered_control_systems',
+            executable='vehicle_manager',
+            namespace='vehicle_1',
+            # name='arm_controller',
+            output='screen'
+        ),
+        Node(
+            package='layered_control_systems',
             executable='arm_controller',
             namespace='vehicle_1',
             # name='arm_controller',
@@ -61,7 +68,7 @@ def generate_launch_description():
         
         Node(
             package='layered_control_systems',
-            executable='publish_random_arm_target_positions',
+            executable='publish_random_target_positions',
             namespace='vehicle_1',
             # name='arm_controller',
             output='screen'
