@@ -16,8 +16,8 @@ class DrivetrainHardwareSimulator(Node):
         self.pose = Pose()
         self.velocity = Vector3()
 
-        self.pose.position.x = 1
-        self.pose.position.y = 2
+        # self.pose.position.x = 1
+        # self.pose.position.y = 2
 
         self.acceleration = Accel()
 

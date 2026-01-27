@@ -62,7 +62,7 @@ class DrivetrainController(Node):
         # a = -( B*v + w_0**2*x )
         
 
-        w_0 = 3              # spring relation (force scaling)
+        w_0 = 1              # spring relation (force scaling)
         B = 2*w_0
 
         # m = 1                 # todo: change the mass dynamically by measuring the response of the payload/arm system
