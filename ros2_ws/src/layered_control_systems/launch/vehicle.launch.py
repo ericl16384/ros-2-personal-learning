@@ -66,11 +66,11 @@ def generate_launch_description():
             output='screen'
         ),
         
-        Node(
-            package='layered_control_systems',
-            executable='publish_random_target_positions',
-            namespace='vehicle_1',
-            # name='arm_controller',
-            output='screen'
-        ),
+        # Node(
+        #     package='layered_control_systems',
+        #     executable='publish_random_target_positions',
+        #     namespace='vehicle_1',
+        #     # name='arm_controller',
+        #     output='screen'
+        # ),
     ])

@@ -29,7 +29,7 @@ class ArmController(Node):
             QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
         )
         self.arm_head_target_pos_subscription = self.create_subscription(
-            Vector3Stamped, "arm_head_target_pos", self.head_target_pos_callback,
+            PoseStamped, "arm_head_target_pos", self.head_target_pos_callback,
             QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
         )
 
@@ -89,7 +89,7 @@ class ArmController(Node):
         self.last_v = np.array((msg.vector.x, msg.vector.y, msg.vector.z))
     
     def head_target_pos_callback(self, msg):
-        self.target_position = np.array((msg.vector.x, msg.vector.y, msg.vector.z))
+        self.target_position = np.array((msg.pose.position.x, msg.pose.position.y, msg.pose.position.z))
 
         # self.get_logger().info(f"arm target pos set: {self.target_position}")
         

@@ -55,6 +55,11 @@ class DrivetrainController(Node):
             Accel, "drivetrain_command_accel",
             QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
         )
+        self.arm_target_pos_publisher = self.create_publisher(
+            PoseStamped, "arm_head_target_pos",
+            QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
+        )
+
 
     def do_control_step(self):
 
@@ -96,6 +101,8 @@ class DrivetrainController(Node):
 
         self.publish_accel_command()
 
+        self.publish_arm_target_pos()
+
     
     def drivetrain_pose_callback(self, msg):
         self.last_r = np.array((msg.pose.position.x, msg.pose.position.y, msg.pose.position.z))
@@ -108,6 +115,7 @@ class DrivetrainController(Node):
 
         # self.get_logger().info(f"arm target pos set: {self.target_position}")
         
+
     def publish_accel_command(self):
         msg = Accel()
         
@@ -116,6 +124,23 @@ class DrivetrainController(Node):
         msg.linear.z = self.acceleration_command.linear.z
 
         self.drivetrain_command_publisher.publish(msg)
+    
+    def publish_arm_target_pos(self):
+
+        displacement = self.target_position - self.last_r
+        
+        current_time_stamp_msg = self.get_clock().now().to_msg()
+        frame_id = self.get_namespace().lstrip('/')
+
+        msg = PoseStamped()
+        msg.header.stamp = current_time_stamp_msg
+        msg.header.frame_id = frame_id
+
+        msg.pose.position.x = displacement[0]
+        msg.pose.position.y = displacement[1]
+        msg.pose.position.z = displacement[2]
+
+        self.arm_target_pos_publisher.publish(msg)
 
 
 def main(args=None):
