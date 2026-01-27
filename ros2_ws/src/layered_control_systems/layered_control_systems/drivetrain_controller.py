@@ -121,10 +121,7 @@ class DrivetrainController(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = DrivetrainController()
-    try:
-        rclpy.spin(node)
-    except KeyboardInterrupt:
-        pass
+    rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()
 
