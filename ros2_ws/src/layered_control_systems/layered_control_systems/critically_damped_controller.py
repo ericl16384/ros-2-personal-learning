@@ -1,3 +1,13 @@
+
+
+
+
+# this is not a normal node, this is a parent class
+
+
+
+
+
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSProfile, ReliabilityPolicy
@@ -7,11 +17,14 @@ from geometry_msgs.msg import AccelStamped
 
 import numpy as np
 
-from critically_damped_controller import CriticallyDampedController
+class CriticallyDampedController(Node):
+    def __init__(self, name, w_0):
+        super().__init__(name)
 
-class ArmController(Node):
-    def __init__(self):
-        super().__init__("arm_controller")
+        # self.w_0 = w_0
+        self.w_0_sq = w_0**2
+        self.beta = 2*w_0
+
 
         self.control_timestep = 1/60  # 60 Hz
         self.control_timer = self.create_timer(self.control_timestep, self.do_control_step)
@@ -48,8 +61,8 @@ class ArmController(Node):
         # a = - B*v - w_0**2*x
         
 
-        w_0 = 3              # spring relation (force scaling)
-        B = 2*w_0
+        # w_0 = 3              # spring relation (force scaling)
+        # B = 2*w_0
 
         # m = 1                 # todo: change the mass dynamically by measuring the response of the payload/arm system
         # c = 1
@@ -62,21 +75,18 @@ class ArmController(Node):
         relative_accel = self.relative_accel
 
 
-        accel_command = - relative_accel - relative_vel*B - relative_pos*w_0**2
+        accel_command = - relative_accel - relative_vel*self.beta - relative_pos*self.w_0_sq
 
         self.publish_accel_command(accel_command)
 
     
-    def head_pose_callback(self, msg):
-        self.last_r = np.array((msg.pose.position.x, msg.pose.position.y, msg.pose.position.z))
+    def relative_pos_callback(self, msg:Vector3Stamped):
+        self.relative_pos = np.array((msg.vector.x, msg.vector.y, msg.vector.z))
+    def relative_vel_callback(self, msg:Vector3Stamped):
+        self.relative_vel = np.array((msg.vector.x, msg.vector.y, msg.vector.z))
+    def relative_accel_callback(self, msg:Vector3Stamped):
+        self.relative_accel = np.array((msg.vector.x, msg.vector.y, msg.vector.z))
     
-    def head_vel_callback(self, msg):
-        self.last_v = np.array((msg.vector.x, msg.vector.y, msg.vector.z))
-    
-    def head_target_pos_callback(self, msg):
-        self.target_position = np.array((msg.pose.position.x, msg.pose.position.y, msg.pose.position.z))
-
-        # self.get_logger().info(f"arm target pos set: {self.target_position}")
         
     def publish_accel_command(self, accel_command:np.array):
 
@@ -93,14 +103,3 @@ class ArmController(Node):
 
         self.arm_head_command_publisher.publish(msg)
 
-
-def main(args=None):
-    rclpy.init(args=args)
-    node = ArmController()
-    rclpy.spin(node)
-    node.destroy_node()
-    rclpy.shutdown()
-
-
-
-    
